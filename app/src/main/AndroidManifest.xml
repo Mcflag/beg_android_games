@@ -27,6 +27,15 @@
         <activity android:name=".basictest.KeyTest" />
         <activity android:name=".basictest.AccelerometerTest" />
         <activity android:name=".basictest.AssetsTest" />
+        <activity android:name=".basictest.ExternalStorageTest" />
+        <activity android:name=".basictest.SoundPoolTest" />
+        <activity android:name=".basictest.MediaPlayerTest" />
+        <activity android:name=".basictest.FullScreenTest" />
+        <activity android:name=".basictest.RenderViewTest" />
+        <activity android:name=".basictest.ShapeTest" />
+        <activity android:name=".basictest.BitmapTest" />
+        <activity android:name=".basictest.FontTest" />
+        <activity android:name=".basictest.SurfaceViewTest" />
     </application>
 
 </manifest>
