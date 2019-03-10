@@ -26,6 +26,7 @@
         <activity android:name=".basictest.MultiTouchTest" />
         <activity android:name=".basictest.KeyTest" />
         <activity android:name=".basictest.AccelerometerTest" />
+        <activity android:name=".basictest.AssetsTest" />
     </application>
 
 </manifest>
