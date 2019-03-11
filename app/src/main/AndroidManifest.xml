@@ -14,13 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".basictest.AndroidBasicsStarter">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".basictest.AndroidBasicsStarter" />
         <activity android:name=".basictest.LifeCycleTest" />
         <activity android:name=".basictest.SingleTouchTest" />
         <activity android:name=".basictest.MultiTouchTest" />
@@ -36,6 +31,14 @@
         <activity android:name=".basictest.BitmapTest" />
         <activity android:name=".basictest.FontTest" />
         <activity android:name=".basictest.SurfaceViewTest" />
+
+        <activity android:name=".mrnom.MrNomGame">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

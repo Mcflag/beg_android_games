@@ -21,6 +21,7 @@ import java.io.IOException;
 public class ExternalStorageTest extends AppCompatActivity {
     final private int REQUEST_READ_EXTERNAL_STORAGE = 123;
     final private int REQUEST_WRITE_EXTERNAL_STORAGE = 123;
+    final private String FILE_ROOT = "gameframe";
     TextView textView;
 
     @Override
@@ -74,9 +75,12 @@ public class ExternalStorageTest extends AppCompatActivity {
             textView.setText("No external storage mounted");
         } else {
             File externalDir = Environment.getExternalStorageDirectory();
-            File textFile = new File(externalDir.getAbsolutePath()
-                    + File.separator + "text.txt");
+            File textDir = new File(externalDir.getAbsolutePath() + File.separator + FILE_ROOT);
+            File textFile = new File(externalDir.getAbsolutePath() + File.separator + FILE_ROOT + File.separator + "text.txt");
             try {
+                if (!textDir.exists()) {
+                    textDir.mkdir();
+                }
                 writeTextFile(textFile, "This is a test. Roger");
                 String text = readTextFile(textFile);
                 textView.setText(text);
