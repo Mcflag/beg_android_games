@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ccooy.gameframe">
 
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -32,13 +36,17 @@
         <activity android:name=".basictest.FontTest" />
         <activity android:name=".basictest.SurfaceViewTest" />
 
-        <activity android:name=".mrnom.MrNomGame">
+        <activity android:name=".mrnom.MrNomGame" />
+
+        <activity android:name=".glbasics.GLBasicsStarter">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".glbasics.GLSurfaceViewTest" />
+        <activity android:name=".glbasics.GLGameTest" />
     </application>
 
 </manifest>
