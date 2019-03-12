@@ -1,7 +1,10 @@
 package com.ccooy.gameframe.framework.impl;
 
+import android.content.res.Resources;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+
+import com.ccooy.gameframe.utils.ShaderUtils;
 
 public class GLGraphics {
     private final int COORDS_PER_VERTEX = 3;
@@ -81,6 +84,10 @@ public class GLGraphics {
         GLES20.glLinkProgram(mProgram);
 
         return mProgram;
+    }
+
+    public int getGLProgram(Resources res, String vertexRes, String fragmentRes) {
+        return ShaderUtils.createProgram(res, vertexRes, fragmentRes);
     }
 
     public void setVertexShaderCode(String shaderCode) {

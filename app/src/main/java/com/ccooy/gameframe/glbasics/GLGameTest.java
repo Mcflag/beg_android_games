@@ -14,7 +14,7 @@ public class GLGameTest extends GLAndroidGame {
         return new TestScreen(this);
     }
 
-    class TestScreen extends Screen {
+    private class TestScreen extends Screen {
         GLGraphics glGraphics;
         Random rand = new Random();
 
