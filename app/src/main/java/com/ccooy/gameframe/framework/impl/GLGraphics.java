@@ -1,29 +1,20 @@
-package com.ccooy.gameframe.glframework.impl;
+package com.ccooy.gameframe.framework.impl;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
 public class GLGraphics {
-    GLSurfaceView glView;
-    GLES20 gl;
     private final int COORDS_PER_VERTEX = 3;
     private final int COORDS_PER_TEXTURE = 2;
     private final int vertexStride = COORDS_PER_VERTEX * 4;
     private final int textureStride = COORDS_PER_TEXTURE * 4;
 
+    private GLSurfaceView glView;
     private String vertexShaderCode = "";
     private String fragmentShaderCode = "";
 
     public GLGraphics(GLSurfaceView glView) {
         this.glView = glView;
-    }
-
-    public GLES20 getGL() {
-        return gl;
-    }
-
-    public void setGL(GLES20 gl) {
-        this.gl = gl;
     }
 
     public int getWidth() {
@@ -62,6 +53,26 @@ public class GLGraphics {
 
         int fragmentShader = GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER);
         GLES20.glShaderSource(fragmentShader, fragmentShaderCode);
+        GLES20.glCompileShader(fragmentShader);
+
+        int mProgram = GLES20.glCreateProgram();
+        GLES20.glAttachShader(mProgram, vertexShader);
+        GLES20.glAttachShader(mProgram, fragmentShader);
+        GLES20.glLinkProgram(mProgram);
+
+        return mProgram;
+    }
+
+    public int getGLProgram(String vertexCode, String fragmentCode) {
+        vertexShaderCode = vertexCode;
+        fragmentShaderCode = fragmentCode;
+
+        int vertexShader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
+        GLES20.glShaderSource(vertexShader, vertexCode);
+        GLES20.glCompileShader(vertexShader);
+
+        int fragmentShader = GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER);
+        GLES20.glShaderSource(fragmentShader, fragmentCode);
         GLES20.glCompileShader(fragmentShader);
 
         int mProgram = GLES20.glCreateProgram();

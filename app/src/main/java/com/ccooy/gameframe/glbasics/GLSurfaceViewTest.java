@@ -2,16 +2,17 @@ package com.ccooy.gameframe.glbasics;
 
 import java.util.Random;
 
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-
 import android.app.Activity;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
 
 public class GLSurfaceViewTest extends Activity {
     GLSurfaceView glView;
@@ -37,7 +38,7 @@ public class GLSurfaceViewTest extends Activity {
         glView.onPause();
     }
 
-    class SimpleRenderer implements Renderer {
+    static class SimpleRenderer implements Renderer {
         Random rand = new Random();
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -49,8 +50,8 @@ public class GLSurfaceViewTest extends Activity {
         }
 
         public void onDrawFrame(GL10 gl) {
-            gl.glClearColor(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), 1);
-            gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+            GLES20.glClearColor(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), 1);
+            GLES20.glClear(GL10.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         }
     }
 }

@@ -1,28 +1,30 @@
 package com.ccooy.gameframe.glbasics;
 
+import com.ccooy.gameframe.framework.Game;
+import com.ccooy.gameframe.framework.Screen;
+import com.ccooy.gameframe.framework.impl.GLAndroidGame;
+import com.ccooy.gameframe.framework.impl.GLGraphics;
+
 import java.util.Random;
 
-import android.opengl.GLES20;
+public class GLGameTest extends GLAndroidGame {
 
-import com.ccooy.gameframe.framework.impl.GLGame;
-
-public class GLGameTest extends GLGame {
-    public GLScreen getStartScreen() {
+    @Override
+    public Screen getStartScreen() {
         return new TestScreen(this);
     }
 
-    class TestScreen extends GLScreen {
+    class TestScreen extends Screen {
         GLGraphics glGraphics;
         Random rand = new Random();
 
-        public TestScreen(GLGameInterface game) {
+        TestScreen(Game game) {
             super(game);
-            glGraphics = ((GLGame) game).getGLGraphics();
+            glGraphics = ((GLAndroidGame) game).getGLGraphics();
         }
 
         @Override
-        public void present(float[] matrix) {
-            GLES20 gl = glGraphics.getGL();
+        public void present(float deltaTime) {
             glGraphics.clearScreen(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), 1);
         }
 
@@ -43,4 +45,3 @@ public class GLGameTest extends GLGame {
         }
     }
 }
-
