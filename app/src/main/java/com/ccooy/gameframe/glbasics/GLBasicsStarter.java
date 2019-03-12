@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class GLBasicsStarter extends ListActivity {
-    String tests[] = {"GLSurfaceViewTest", "GLGameTest", "FirstTriangleTest",
+    String tests[] = {"GLSurfaceViewTest", "GLGameTest", "FirstTriangleTest", "TransTriangleTest",
             "ColoredTriangleTest", "TexturedTriangleTest", "IndexedTest",
             "BlendingTest", "BobTest", "OptimizedBobTest"};
 

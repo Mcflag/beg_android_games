@@ -3,6 +3,7 @@ package com.ccooy.gameframe.framework.impl;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -38,6 +39,11 @@ public abstract class GLAndroidGame extends AppCompatActivity implements Game, G
     GLGameState state = GLGameState.Initialized;
     final Object stateChanged = new Object();
     long startTime = System.nanoTime();
+
+    public static float[] mMVPMatrix = new float[16];
+    public static float[] mProjectionMatrix = new float[16];
+    public static float[] mViewMatrix = new float[16];
+    public static float[] mTranslationMatrix = new float[16];
 
     private static final String TAG = "GLGame";
     private Context context;
@@ -150,11 +156,14 @@ public abstract class GLAndroidGame extends AppCompatActivity implements Game, G
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
         float ratio = (float) width / height;
+        Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
     }
 
     @Override
     public void onDrawFrame(GL10 unused) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+        Matrix.setLookAtM(mViewMatrix, 0, 0, 0, 7.0f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
         synchronized (stateChanged) {
             state = this.state;
@@ -184,6 +193,13 @@ public abstract class GLAndroidGame extends AppCompatActivity implements Game, G
                 stateChanged.notifyAll();
             }
         }
+
+        float[] matrix = new float[16];
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        Matrix.setIdentityM(mTranslationMatrix,0);
+        Matrix.multiplyMM(matrix, 0, mMVPMatrix, 0, mTranslationMatrix, 0);
+        GLES20.glDisable(GLES20.GL_BLEND);
     }
 
     public void checkGlError(String glOperation) {

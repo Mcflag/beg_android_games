@@ -4,7 +4,7 @@ import android.content.res.Resources;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
-import com.ccooy.gameframe.utils.ShaderUtils;
+import com.ccooy.gameframe.framework.utils.ShaderUtils;
 
 public class GLGraphics {
     private final int COORDS_PER_VERTEX = 3;

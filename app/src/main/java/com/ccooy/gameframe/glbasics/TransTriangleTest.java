@@ -10,13 +10,14 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-public class FirstTriangleTest extends GLAndroidGame {
+public class TransTriangleTest extends GLAndroidGame {
 
     int mProgram;
     int mPositionHandle;
     int coordsPerVertex;
     int vertexStride;
     int mColorHandle;
+    int mMatrixHandler;
     float color[] = {1f, 1f, 1f, 1f};
     FloatBuffer vertexBuffer;
     float triangleCoords[] = {
@@ -27,13 +28,13 @@ public class FirstTriangleTest extends GLAndroidGame {
 
     @Override
     public Screen getStartScreen() {
-        return new FirstTriangleScreen(this);
+        return new TransTriangleScreen(this);
     }
 
-    private class FirstTriangleScreen extends Screen {
+    private class TransTriangleScreen extends Screen {
         GLGraphics glGraphics;
 
-        FirstTriangleScreen(GLAndroidGame game) {
+        TransTriangleScreen(GLAndroidGame game) {
             super(game);
             glGraphics = game.getGLGraphics();
 
@@ -56,13 +57,16 @@ public class FirstTriangleTest extends GLAndroidGame {
 
             coordsPerVertex = glGraphics.getCoordsPerVertex();
             vertexStride = glGraphics.getVertexStride();
-            mProgram = glGraphics.getGLProgram(getApplicationContext().getResources(), "glbasictest/vshader/triangle.glsl", "glbasictest/fshader/triangle.glsl");
+            mProgram = glGraphics.getGLProgram(getApplicationContext().getResources(), "glbasictest/vshader/transtriangle.glsl", "glbasictest/fshader/transtriangle.glsl");
 
             final int vertexCount = triangleCoords.length / coordsPerVertex;
             GLES20.glUseProgram(mProgram);
+            mMatrixHandler = GLES20.glGetUniformLocation(mProgram, "vMatrix");
+            GLES20.glUniformMatrix4fv(mMatrixHandler, 1, false, mMVPMatrix, 0);
+
             mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
             GLES20.glEnableVertexAttribArray(mPositionHandle);
-            GLES20.glVertexAttribPointer(mPositionHandle, coordsPerVertex,GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
+            GLES20.glVertexAttribPointer(mPositionHandle, coordsPerVertex, GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
 
             mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
             GLES20.glUniform4fv(mColorHandle, 1, color, 0);
