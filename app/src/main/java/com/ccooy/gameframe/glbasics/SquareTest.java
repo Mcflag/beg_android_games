@@ -17,31 +17,44 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
-public class TexturedTriangleTest extends GLAndroidGame {
+public class SquareTest extends GLAndroidGame {
 
-    float triangleCoords[] = {
-            0.5f, 0.5f, 0.0f, // top
+    static float squareCoords[] = {
+            -0.5f, 0.5f, 0.0f, // top left
             -0.5f, -0.5f, 0.0f, // bottom left
-            0.5f, -0.5f, 0.0f  // bottom right
+            0.5f, -0.5f, 0.0f, // bottom right
+            0.5f, 0.5f, 0.0f  // top right
     };
 
-    final short drawOrder[] = {0, 1, 2};
+    static short index[] = {
+            0, 1, 2, 0, 2, 3
+    };
+    float color[] = {
+            0.0f, 1.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+    };
     float texture[] = {
-            1f, 1f,
+            0f, 1f,
             0f, 0f,
             1f, 0f,
+            1f, 1f,
     };
 
     int mProgram;
     FloatBuffer vertexBuffer;
+    FloatBuffer colorBuffer;
     FloatBuffer textureBuffer;
     ShortBuffer drawListBuffer;
 
     int mPositionHandle;
+    int mColorHandle;
     int mTextureHandle;
     int mMatrixHandler;
 
     int coordsPerVertex;
+    int colorPerVertex;
     int coordsPerTexture;
 
     int vertexStride;
@@ -52,25 +65,28 @@ public class TexturedTriangleTest extends GLAndroidGame {
 
     @Override
     public Screen getStartScreen() {
-        return new TexturedTriangleScreen(this);
+        return new SquareScreen(this);
     }
 
-    private class TexturedTriangleScreen extends Screen {
-
+    private class SquareScreen extends Screen {
         GLGraphics glGraphics;
-        float timer = 0f;
-        float scroll = 0f;
 
-        TexturedTriangleScreen(GLAndroidGame game) {
+        SquareScreen(GLAndroidGame game) {
             super(game);
             glGraphics = game.getGLGraphics();
             textureId = this.loadTexture("basictest/bobrgb888.png");
 
-            ByteBuffer bb = ByteBuffer.allocateDirect(triangleCoords.length * 4);
+            ByteBuffer bb = ByteBuffer.allocateDirect(squareCoords.length * 4);
             bb.order(ByteOrder.nativeOrder());
             vertexBuffer = bb.asFloatBuffer();
-            vertexBuffer.put(triangleCoords);
+            vertexBuffer.put(squareCoords);
             vertexBuffer.position(0);
+
+            ByteBuffer bba = ByteBuffer.allocateDirect(color.length * 4);
+            bba.order(ByteOrder.nativeOrder());
+            colorBuffer = bba.asFloatBuffer();
+            colorBuffer.put(color);
+            colorBuffer.position(0);
 
             ByteBuffer bbc = ByteBuffer.allocateDirect(texture.length * 4);
             bbc.order(ByteOrder.nativeOrder());
@@ -78,19 +94,19 @@ public class TexturedTriangleTest extends GLAndroidGame {
             textureBuffer.put(texture);
             textureBuffer.position(0);
 
-            ByteBuffer bbo = ByteBuffer.allocateDirect(drawOrder.length * 4);
+            ByteBuffer bbo = ByteBuffer.allocateDirect(index.length * 4);
             bbo.order(ByteOrder.nativeOrder());
             drawListBuffer = bbo.asShortBuffer();
-            drawListBuffer.put(drawOrder);
+            drawListBuffer.put(index);
             drawListBuffer.position(0);
 
             coordsPerVertex = glGraphics.getCoordsPerVertex();
             vertexStride = glGraphics.getVertexStride();
+            colorPerVertex = glGraphics.getColorPerVertex();
             coordsPerTexture = glGraphics.getCoordsPerTexture();
             textureStride = glGraphics.getTextureStride();
-            vertexCount = triangleCoords.length / coordsPerVertex;
-            mProgram = glGraphics.getGLProgram(getApplicationContext().getResources(), "glbasictest/vshader/texturetriangle.glsl", "glbasictest/fshader/texturetriangle.glsl");
-
+            vertexCount = squareCoords.length / coordsPerVertex;
+            mProgram = glGraphics.getGLProgram(getApplicationContext().getResources(), "glbasictest/vshader/square.glsl", "glbasictest/fshader/square.glsl");
         }
 
         @Override
@@ -110,6 +126,10 @@ public class TexturedTriangleTest extends GLAndroidGame {
             GLES20.glEnableVertexAttribArray(mPositionHandle);
             GLES20.glVertexAttribPointer(mPositionHandle, coordsPerVertex, GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
 
+            mColorHandle = GLES20.glGetAttribLocation(mProgram, "aColor");
+            GLES20.glEnableVertexAttribArray(mColorHandle);
+            GLES20.glVertexAttribPointer(mColorHandle, colorPerVertex, GLES20.GL_FLOAT, false, 0, colorBuffer);
+
             mTextureHandle = GLES20.glGetAttribLocation(mProgram, "aTextureCoord");
             GLES20.glEnableVertexAttribArray(mTextureHandle);
             GLES20.glVertexAttribPointer(mTextureHandle, coordsPerTexture, GLES20.GL_FLOAT, false, textureStride, textureBuffer);
@@ -119,18 +139,9 @@ public class TexturedTriangleTest extends GLAndroidGame {
             int fTexture = GLES20.glGetUniformLocation(mProgram, "vTextureCoord");
             int fScroll = GLES20.glGetUniformLocation(mProgram, "uScroll");
             GLES20.glUniform1i(fTexture, 0);
+            GLES20.glUniform1f(fScroll, 0);
 
-            timer = timer + deltaTime;
-            if (timer > 0.001) {
-                scroll += 0.01;
-                if (scroll >= 1) {
-                    scroll = 0;
-                }
-                timer = 0;
-            }
-            GLES20.glUniform1f(fScroll, scroll);
-
-            GLES20.glDrawElements(GLES20.GL_TRIANGLES, drawOrder.length, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
+            GLES20.glDrawElements(GLES20.GL_TRIANGLES, index.length, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
             GLES20.glDisableVertexAttribArray(mPositionHandle);
         }
 
