@@ -9,6 +9,7 @@ import com.ccooy.gameframe.framework.utils.ShaderUtils;
 public class GLGraphics {
     private final int COORDS_PER_VERTEX = 3;
     private final int COORDS_PER_TEXTURE = 2;
+    private final int COLOR_PER_VERTEX = 4;
     private final int vertexStride = COORDS_PER_VERTEX * 4;
     private final int textureStride = COORDS_PER_TEXTURE * 4;
 
@@ -34,6 +35,10 @@ public class GLGraphics {
 
     public int getCoordsPerTexture() {
         return COORDS_PER_TEXTURE;
+    }
+
+    public int getColorPerVertex() {
+        return COLOR_PER_VERTEX;
     }
 
     public int getVertexStride() {

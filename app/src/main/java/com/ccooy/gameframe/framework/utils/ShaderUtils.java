@@ -14,7 +14,7 @@ public class ShaderUtils {
     }
 
     public static void checkGLError(String op){
-        Log.e("cccccc",op);
+        Log.e(TAG,op);
     }
 
     public static int loadShader(int shaderType,String source){
@@ -25,8 +25,8 @@ public class ShaderUtils {
             int[] compiled=new int[1];
             GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS,compiled,0);
             if(compiled[0]==0){
-                Log.e(TAG,"Could not compile shader:"+shaderType);
-                Log.e(TAG,"GLES20 Error:"+ GLES20.glGetShaderInfoLog(shader));
+                checkGLError("Could not compile shader:"+shaderType);
+                checkGLError("GLES20 Error:"+ GLES20.glGetShaderInfoLog(shader));
                 GLES20.glDeleteShader(shader);
                 shader=0;
             }
@@ -46,14 +46,12 @@ public class ShaderUtils {
         int program= GLES20.glCreateProgram();
         if(program!=0){
             GLES20.glAttachShader(program,vertex);
-            checkGLError("Attach Vertex Shader");
             GLES20.glAttachShader(program,fragment);
-            checkGLError("Attach Fragment Shader");
             GLES20.glLinkProgram(program);
             int[] linkStatus=new int[1];
             GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS,linkStatus,0);
             if(linkStatus[0]!= GLES20.GL_TRUE){
-                Log.e(TAG,"Could not link program:"+ GLES20.glGetProgramInfoLog(program));
+                checkGLError("Could not link program:"+ GLES20.glGetProgramInfoLog(program));
                 GLES20.glDeleteProgram(program);
                 program=0;
             }
