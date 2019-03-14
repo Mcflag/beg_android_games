@@ -17,7 +17,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
-public class SquareTest extends GLAndroidGame {
+public class IndexedTest extends GLAndroidGame {
 
     static float squareCoords[] = {
             -0.5f, 0.5f, 0.0f, // top left

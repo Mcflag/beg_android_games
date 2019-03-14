@@ -51,7 +51,8 @@
         <activity android:name=".glbasics.TransTriangleTest" />
         <activity android:name=".glbasics.ColoredTriangleTest" />
         <activity android:name=".glbasics.TexturedTriangleTest" />
-        <activity android:name=".glbasics.SquareTest" />
+        <activity android:name=".glbasics.IndexedTest" />
+        <activity android:name=".glbasics.CircleTest" />
     </application>
 
 </manifest>
