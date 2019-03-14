@@ -9,37 +9,26 @@ import com.ccooy.gameframe.framework.impl.GLGraphics;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
+import java.util.ArrayList;
 
 public class CircleTest extends GLAndroidGame {
-    private float circlePos[];
-    private float height=0.0f;
-    private float radius=1.0f;
-    private int n=360;  //切割份数
+    private float[] circlePos;
+    private float height = 0.0f;
+    private float radius = 1.0f;
+    private float textureRadius = 0.5f;
+    private int n = 360;  //切割份数
 
-    float color[] = {
-            1.0f, 1.0f, 1.0f, 1.0f,
-    };
-    float texture[] = {
-            0f, 1f,
-            0f, 0f,
-            1f, 0f,
-            1f, 1f,
-    };
+    private float[] texture;
 
     int mProgram;
     FloatBuffer vertexBuffer;
-    FloatBuffer colorBuffer;
     FloatBuffer textureBuffer;
-    ShortBuffer drawListBuffer;
 
     int mPositionHandle;
-    int mColorHandle;
     int mTextureHandle;
     int mMatrixHandler;
 
     int coordsPerVertex;
-    int colorPerVertex;
     int coordsPerTexture;
 
     int vertexStride;
@@ -60,18 +49,14 @@ public class CircleTest extends GLAndroidGame {
             super(game);
             glGraphics = game.getGLGraphics();
             textureId = this.loadTexture("basictest/bobrgb888.png");
+            circlePos = createPositions();
+            texture = createTexture();
 
-            ByteBuffer bb = ByteBuffer.allocateDirect(squareCoords.length * 4);
+            ByteBuffer bb = ByteBuffer.allocateDirect(circlePos.length * 4);
             bb.order(ByteOrder.nativeOrder());
             vertexBuffer = bb.asFloatBuffer();
-            vertexBuffer.put(squareCoords);
+            vertexBuffer.put(circlePos);
             vertexBuffer.position(0);
-
-            ByteBuffer bba = ByteBuffer.allocateDirect(color.length * 4);
-            bba.order(ByteOrder.nativeOrder());
-            colorBuffer = bba.asFloatBuffer();
-            colorBuffer.put(color);
-            colorBuffer.position(0);
 
             ByteBuffer bbc = ByteBuffer.allocateDirect(texture.length * 4);
             bbc.order(ByteOrder.nativeOrder());
@@ -79,18 +64,11 @@ public class CircleTest extends GLAndroidGame {
             textureBuffer.put(texture);
             textureBuffer.position(0);
 
-            ByteBuffer bbo = ByteBuffer.allocateDirect(index.length * 4);
-            bbo.order(ByteOrder.nativeOrder());
-            drawListBuffer = bbo.asShortBuffer();
-            drawListBuffer.put(index);
-            drawListBuffer.position(0);
-
             coordsPerVertex = glGraphics.getCoordsPerVertex();
             vertexStride = glGraphics.getVertexStride();
-            colorPerVertex = glGraphics.getColorPerVertex();
             coordsPerTexture = glGraphics.getCoordsPerTexture();
             textureStride = glGraphics.getTextureStride();
-            vertexCount = squareCoords.length / coordsPerVertex;
+            vertexCount = circlePos.length / coordsPerVertex;
             mProgram = glGraphics.getGLProgram(getApplicationContext().getResources(), "glbasictest/vshader/oval.glsl", "glbasictest/fshader/oval.glsl");
         }
 
@@ -110,25 +88,16 @@ public class CircleTest extends GLAndroidGame {
             GLES20.glEnableVertexAttribArray(mPositionHandle);
             GLES20.glVertexAttribPointer(mPositionHandle, coordsPerVertex, GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
 
-//            mColorHandle = GLES20.glGetAttribLocation(mProgram, "aColor");
-//            GLES20.glEnableVertexAttribArray(mColorHandle);
-//            GLES20.glVertexAttribPointer(mColorHandle, colorPerVertex, GLES20.GL_FLOAT, false, 0, colorBuffer);
+            mTextureHandle = GLES20.glGetAttribLocation(mProgram, "aTextureCoord");
+            GLES20.glEnableVertexAttribArray(mTextureHandle);
+            GLES20.glVertexAttribPointer(mTextureHandle, coordsPerTexture, GLES20.GL_FLOAT, false, textureStride, textureBuffer);
 
-            mColorHandle = GLES20.glGetUniformLocation(mProgram, "uColor");
-            GLES20.glUniform4fv(mColorHandle, 1, color, 0);
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+            int fTexture = GLES20.glGetUniformLocation(mProgram, "vTextureCoord");
+            GLES20.glUniform1i(fTexture, 0);
 
-//            mTextureHandle = GLES20.glGetAttribLocation(mProgram, "aTextureCoord");
-//            GLES20.glEnableVertexAttribArray(mTextureHandle);
-//            GLES20.glVertexAttribPointer(mTextureHandle, coordsPerTexture, GLES20.GL_FLOAT, false, textureStride, textureBuffer);
-
-//            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-//            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
-//            int fTexture = GLES20.glGetUniformLocation(mProgram, "vTextureCoord");
-//            int fScroll = GLES20.glGetUniformLocation(mProgram, "uScroll");
-//            GLES20.glUniform1i(fTexture, 0);
-//            GLES20.glUniform1f(fScroll, 0);
-
-            GLES20.glDrawElements(GLES20.GL_TRIANGLES, index.length, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
+            GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, vertexCount);
             GLES20.glDisableVertexAttribArray(mPositionHandle);
         }
 
@@ -145,6 +114,40 @@ public class CircleTest extends GLAndroidGame {
         @Override
         public void dispose() {
 
+        }
+
+        private float[] createPositions() {
+            ArrayList<Float> data = new ArrayList<>();
+            data.add(0.0f);
+            data.add(0.0f);
+            data.add(height);
+            float angleSpan = 360.0f / n;
+            for (int i = 0; i < 360 + angleSpan; i += angleSpan) {
+                data.add((float) (radius * Math.sin(i * Math.PI / 180f)));
+                data.add((float) (radius * Math.cos(i * Math.PI / 180f)));
+                data.add(height);
+            }
+            float[] f = new float[data.size()];
+            for (int i = 0; i < f.length; i++) {
+                f[i] = data.get(i);
+            }
+            return f;
+        }
+
+        private float[] createTexture() {
+            ArrayList<Float> data = new ArrayList<>();
+            data.add(0.5f);
+            data.add(0.5f);
+            float angleSpan = 360.0f / n;
+            for (int i = 0; i < 360 + angleSpan; i += angleSpan) {
+                data.add(0.5f+(float) (textureRadius * Math.sin(i * Math.PI / 180f)));
+                data.add(0.5f+(float) (textureRadius * Math.cos(i * Math.PI / 180f)));
+            }
+            float[] f = new float[data.size()];
+            for (int i = 0; i < f.length; i++) {
+                f[i] = data.get(i);
+            }
+            return f;
         }
     }
 }
