@@ -1,10 +1,6 @@
 package com.ccooy.gameframe.glbasics;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.opengl.GLES20;
-import android.opengl.GLUtils;
 
 import com.ccooy.gameframe.framework.Screen;
 import com.ccooy.gameframe.framework.gl.Texture;
@@ -12,11 +8,7 @@ import com.ccooy.gameframe.framework.gl.Vertices;
 import com.ccooy.gameframe.framework.impl.GLAndroidGame;
 import com.ccooy.gameframe.framework.impl.GLGraphics;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 public class IndexedTest extends GLAndroidGame {
-    int textureId;
 
     @Override
     public Screen getStartScreen() {
@@ -74,8 +66,6 @@ public class IndexedTest extends GLAndroidGame {
             bob.bind(GLES20.GL_TEXTURE0);
 
             model.draw(mProgram, GLES20.GL_TRIANGLES);
-
-
         }
 
         @Override
