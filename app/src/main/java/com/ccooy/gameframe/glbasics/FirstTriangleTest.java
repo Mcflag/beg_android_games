@@ -3,27 +3,11 @@ package com.ccooy.gameframe.glbasics;
 import android.opengl.GLES20;
 
 import com.ccooy.gameframe.framework.Screen;
+import com.ccooy.gameframe.framework.gl.Vertices;
 import com.ccooy.gameframe.framework.impl.GLAndroidGame;
 import com.ccooy.gameframe.framework.impl.GLGraphics;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
 public class FirstTriangleTest extends GLAndroidGame {
-
-    int mProgram;
-    int mPositionHandle;
-    int coordsPerVertex;
-    int vertexStride;
-    int mColorHandle;
-    float color[] = {1f, 1f, 1f, 1f};
-    FloatBuffer vertexBuffer;
-    float triangleCoords[] = {
-            0.5f,  0.5f, 0.0f, // top
-            -0.5f, -0.5f, 0.0f, // bottom left
-            0.5f, -0.5f, 0.0f  // bottom right
-    };
 
     @Override
     public Screen getStartScreen() {
@@ -32,11 +16,23 @@ public class FirstTriangleTest extends GLAndroidGame {
 
     private class FirstTriangleScreen extends Screen {
         GLGraphics glGraphics;
+        Vertices model;
+        int mProgram;
+        float[] color = {1f, 1f, 1f, 1f};
+        float[] triangleCoords = {
+                0.5f, 0.5f, 0.0f, // top
+                -0.5f, -0.5f, 0.0f, // bottom left
+                0.5f, -0.5f, 0.0f  // bottom right
+        };
 
         FirstTriangleScreen(GLAndroidGame game) {
             super(game);
             glGraphics = game.getGLGraphics();
 
+            model = new Vertices(triangleCoords.length, 0, color.length);
+            model.setVertices(triangleCoords, glGraphics.getCoordsPerVertex(), glGraphics.getVertexStride(), "vPosition");
+            model.setColor(color, glGraphics.getColorPerVertex(), 0, Vertices.ColorType.UNIFORM, "vColor");
+            mProgram = glGraphics.getGLProgram(getApplicationContext().getResources(), "glbasictest/vshader/triangle.glsl", "glbasictest/fshader/triangle.glsl");
         }
 
         @Override
@@ -47,27 +43,8 @@ public class FirstTriangleTest extends GLAndroidGame {
 
         @Override
         public void present(float deltaTime) {
-            ByteBuffer bb = ByteBuffer.allocateDirect(triangleCoords.length * 4);
-            bb.order(ByteOrder.nativeOrder());
-
-            vertexBuffer = bb.asFloatBuffer();
-            vertexBuffer.put(triangleCoords);
-            vertexBuffer.position(0);
-
-            coordsPerVertex = glGraphics.getCoordsPerVertex();
-            vertexStride = glGraphics.getVertexStride();
-            mProgram = glGraphics.getGLProgram(getApplicationContext().getResources(), "glbasictest/vshader/triangle.glsl", "glbasictest/fshader/triangle.glsl");
-
-            final int vertexCount = triangleCoords.length / coordsPerVertex;
             GLES20.glUseProgram(mProgram);
-            mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
-            GLES20.glEnableVertexAttribArray(mPositionHandle);
-            GLES20.glVertexAttribPointer(mPositionHandle, coordsPerVertex,GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
-
-            mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
-            GLES20.glUniform4fv(mColorHandle, 1, color, 0);
-            GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
-            GLES20.glDisableVertexAttribArray(mPositionHandle);
+            model.draw(mProgram, GLES20.GL_TRIANGLES);
         }
 
         @Override
