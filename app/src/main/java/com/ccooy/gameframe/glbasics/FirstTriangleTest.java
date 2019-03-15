@@ -29,7 +29,7 @@ public class FirstTriangleTest extends GLAndroidGame {
             super(game);
             glGraphics = game.getGLGraphics();
 
-            model = new Vertices(triangleCoords.length, 0, color.length);
+            model = new Vertices(triangleCoords.length, 0, 0, color.length);
             model.setVertices(triangleCoords, glGraphics.getCoordsPerVertex(), glGraphics.getVertexStride(), "vPosition");
             model.setColor(color, glGraphics.getColorPerVertex(), 0, Vertices.ColorType.UNIFORM, "vColor");
             mProgram = glGraphics.getGLProgram(getApplicationContext().getResources(), "glbasictest/vshader/triangle.glsl", "glbasictest/fshader/triangle.glsl");

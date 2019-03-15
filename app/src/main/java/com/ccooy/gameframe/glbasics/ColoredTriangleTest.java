@@ -34,7 +34,7 @@ public class ColoredTriangleTest extends GLAndroidGame {
         ColoredTriangleScreen(GLAndroidGame game) {
             super(game);
             glGraphics = game.getGLGraphics();
-            model = new Vertices(triangleCoords.length, 0, color.length);
+            model = new Vertices(triangleCoords.length, 0, 0, color.length);
             model.setVertices(triangleCoords, glGraphics.getCoordsPerVertex(), glGraphics.getVertexStride(), "aPosition");
             model.setColor(color, glGraphics.getColorPerVertex(), 0, Vertices.ColorType.ATTRIBUTE, "aColor");
             mProgram = glGraphics.getGLProgram(getApplicationContext().getResources(), "glbasictest/vshader/coloredtriangle.glsl", "glbasictest/fshader/coloredtriangle.glsl");

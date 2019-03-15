@@ -58,7 +58,7 @@ public class SquareTest extends GLAndroidGame {
         SquareScreen(GLAndroidGame game) {
             super(game);
             glGraphics = game.getGLGraphics();
-            model = new Vertices(squareCoords.length, index.length, color.length);
+            model = new Vertices(squareCoords.length, index.length, 0, color.length);
             model.setVertices(squareCoords, glGraphics.getCoordsPerVertex(), glGraphics.getVertexStride(), "aPosition");
             model.setIndices(index);
             model.setColor(color, glGraphics.getColorPerVertex(), 0, Vertices.ColorType.UNIFORM, "uColor");

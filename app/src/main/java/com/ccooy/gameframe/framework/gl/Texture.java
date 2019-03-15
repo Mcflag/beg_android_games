@@ -18,62 +18,72 @@ public class Texture {
     FileIO fileIO;
     String fileName;
     int textureId;
-    int minFilter;
-    int magFilter;
-    int width;
-    int height;
 
     public Texture(GLAndroidGame glGame, String fileName) {
-        this.glGraphics = glGame.getGLGraphics();
         this.fileIO = glGame.getFileIO();
         this.fileName = fileName;
         load();
     }
 
     private void load() {
-        int[] textureIds = new int[1];
-        GLES20.glGenTextures(1, textureIds, 0);
-        textureId = textureIds[0];
+        int[] textures = new int[1];
+        InputStream imagestream = null;
+        Bitmap bitmap = null;
+
         Matrix flip = new Matrix();
         flip.postScale(-1f, -1f);
-        InputStream in = null;
-        try {
-            in = fileIO.readAsset(fileName);
-            Bitmap bitmap = BitmapFactory.decodeStream(in);
-            width = bitmap.getWidth();
-            height = bitmap.getHeight();
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, flip, false);
 
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-            setFilters(GLES20.GL_NEAREST, GLES20.GL_NEAREST);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
-        } catch (IOException e) {
-            throw new RuntimeException("Couldn't load texture '" + fileName + "'", e);
+        try {
+            imagestream = fileIO.readAsset(fileName);
+            bitmap = BitmapFactory.decodeStream(imagestream);
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), flip, false);
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException e) {
+            try {
+                if (imagestream != null) {
+                    imagestream.close();
+                    imagestream = null;
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
+        GLES20.glGenTextures(1, textures, 0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
+
+        setFilters(GLES20.GL_NEAREST, GLES20.GL_NEAREST);
+        setWrap(GLES20.GL_CLAMP_TO_EDGE, GLES20.GL_CLAMP_TO_EDGE);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+
+        if (bitmap != null) {
+            bitmap.recycle();
+        }
+
+        textureId = textures[0];
     }
 
-    public void reload() {
+    public void reload(int textureChannel) {
         load();
-        bind();
-        setFilters(minFilter, magFilter);
+        bind(textureChannel);
+        setFilters(GLES20.GL_NEAREST, GLES20.GL_NEAREST);
+        setWrap(GLES20.GL_CLAMP_TO_EDGE, GLES20.GL_CLAMP_TO_EDGE);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
 
     public void setFilters(int minFilter, int magFilter) {
-        this.minFilter = minFilter;
-        this.magFilter = magFilter;
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, minFilter);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, magFilter);
     }
 
-    public void bind() {
+    public void setWrap(int wrapS, int wrapT) {
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, wrapS);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, wrapT);
+    }
+
+    public void bind(int textureChannel) {
+        GLES20.glActiveTexture(textureChannel);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
     }
 
