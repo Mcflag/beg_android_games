@@ -22,16 +22,16 @@ public class TexturedTriangleTest extends GLAndroidGame {
         Texture bob;
 
         float triangleCoords[] = {
-                0.5f, 0.5f, 0.0f, // top
+                0.5f, 0.5f, 0.0f, // top right
                 -0.5f, -0.5f, 0.0f, // bottom left
                 0.5f, -0.5f, 0.0f  // bottom right
         };
 
         final short index[] = {0, 1, 2};
         float texture[] = {
-                1f, 1f,
-                0f, 0f,
-                1f, 0f,
+                1f, 1f,// top right
+                0f, 0f,// bottom left
+                1f, 0f,// bottom right
         };
         int mProgram;
         int mMatrixHandler;

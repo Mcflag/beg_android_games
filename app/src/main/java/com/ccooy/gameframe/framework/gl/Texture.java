@@ -1,8 +1,5 @@
 package com.ccooy.gameframe.framework.gl;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -12,6 +9,9 @@ import android.opengl.GLUtils;
 import com.ccooy.gameframe.framework.FileIO;
 import com.ccooy.gameframe.framework.impl.GLAndroidGame;
 import com.ccooy.gameframe.framework.impl.GLGraphics;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class Texture {
     GLGraphics glGraphics;
@@ -31,7 +31,7 @@ public class Texture {
         Bitmap bitmap = null;
 
         Matrix flip = new Matrix();
-        flip.postScale(-1f, -1f);
+        flip.postScale(1f, -1f);
 
         try {
             imagestream = fileIO.readAsset(fileName);

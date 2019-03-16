@@ -1,36 +1,13 @@
 package com.ccooy.gameframe.glbasics;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.opengl.GLES20;
-import android.opengl.GLUtils;
 
 import com.ccooy.gameframe.framework.Screen;
 import com.ccooy.gameframe.framework.gl.Vertices;
 import com.ccooy.gameframe.framework.impl.GLAndroidGame;
 import com.ccooy.gameframe.framework.impl.GLGraphics;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
 public class SquareTest extends GLAndroidGame {
-
-    FloatBuffer vertexBuffer;
-    ShortBuffer drawListBuffer;
-
-    int mPositionHandle;
-    int mColorHandle;
-    int mMatrixHandler;
-
-    int coordsPerVertex;
-
-    int vertexStride;
-    int vertexCount;
 
     @Override
     public Screen getStartScreen() {
