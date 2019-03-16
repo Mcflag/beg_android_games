@@ -9,6 +9,8 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="false"
@@ -38,13 +40,7 @@
 
         <activity android:name=".mrnom.MrNomGame" />
 
-        <activity android:name=".glbasics.GLBasicsStarter">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".glbasics.GLBasicsStarter" />
         <activity android:name=".glbasics.GLSurfaceViewTest" />
         <activity android:name=".glbasics.GLGameTest" />
         <activity android:name=".glbasics.FirstTriangleTest" />
@@ -56,6 +52,38 @@
         <activity android:name=".glbasics.CircleTest" />
         <activity android:name=".glbasics.BlendingTest" />
         <activity android:name=".glbasics.BobTest" />
+
+
+        <activity android:name=".test.gamedev2d.GameDev2DStarter" />
+        <activity android:name=".test.gamedev2d.AnimationTest" />
+        <activity android:name=".test.gamedev2d.Camera2DTest" />
+        <activity android:name=".test.gamedev2d.CannonTest" />
+        <activity android:name=".test.gamedev2d.CannonGravityTest" />
+        <activity android:name=".test.gamedev2d.CollisionTest" />
+        <activity android:name=".test.gamedev2d.SpriteBatcherTest" />
+        <activity android:name=".test.gamedev2d.TextureAtlasTest" />
+
+        <activity android:name=".testa.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".testa.render.FGLViewActivity" />
+        <activity android:name=".testa.ChooseActivity" />
+        <activity android:name=".testa.image.SGLViewActivity" />
+        <activity android:name=".testa.vary.VaryActivity" />
+        <activity android:name=".testa.camera.CameraActivity" />
+        <activity android:name=".testa.camera.Camera2Activity" />
+        <activity android:name=".testa.camera.Camera3Activity" />
+        <activity android:name=".testa.etc.ZipActivity" />
+        <activity android:name=".testa.fbo.FBOActivity" />
+        <activity android:name=".testa.egl.EGLBackEnvActivity" />
+        <activity android:name=".testa.obj.ObjLoadActivity" />
+        <activity android:name=".testa.obj.ObjLoadActivity2" />
+        <activity android:name=".testa.vr.VrContextActivity" />
+        <activity android:name=".testa.blend.BlendActivity" />
+        <activity android:name=".testa.light.LightActivity" />
     </application>
 
 </manifest>
