@@ -12,7 +12,7 @@ import android.widget.ListView;
 public class GLBasicsStarter extends ListActivity {
     String tests[] = {"GLSurfaceViewTest", "GLGameTest", "FirstTriangleTest", "TransTriangleTest",
             "ColoredTriangleTest", "SquareTest", "TexturedTriangleTest", "IndexedTest", "CircleTest",
-            "BlendingTest", "BobTest", "OptimizedBobTest"};
+            "BlendingTest", "BobTest"};
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -55,6 +55,7 @@
         <activity android:name=".glbasics.IndexedTest" />
         <activity android:name=".glbasics.CircleTest" />
         <activity android:name=".glbasics.BlendingTest" />
+        <activity android:name=".glbasics.BobTest" />
     </application>
 
 </manifest>

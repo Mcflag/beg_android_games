@@ -194,11 +194,8 @@ public abstract class GLAndroidGame extends AppCompatActivity implements Game, G
             }
         }
 
-        float[] matrix = new float[16];
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-        Matrix.setIdentityM(mTranslationMatrix,0);
-        Matrix.multiplyMM(matrix, 0, mMVPMatrix, 0, mTranslationMatrix, 0);
         GLES20.glDisable(GLES20.GL_BLEND);
     }
 

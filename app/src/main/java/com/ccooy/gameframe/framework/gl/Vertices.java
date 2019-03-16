@@ -12,11 +12,11 @@ public class Vertices {
         UNIFORM, ATTRIBUTE
     }
 
-    private final FloatBuffer vertexBuffer;
-    private final FloatBuffer textureBuffer;
-    private final ShortBuffer indexBuffer;
-    private final FloatBuffer colorBuffer;
-    private float[] color;
+    FloatBuffer vertexBuffer;
+    FloatBuffer textureBuffer;
+    ShortBuffer indexBuffer;
+    FloatBuffer colorBuffer;
+    float[] color;
 
     private int mPositionHandle;
     private int mTextureHandle;
